@@ -85,9 +85,11 @@ export default function Index() {
               <Badge variant="secondary" className="bg-brand-100 text-brand-700">
                 {uploadedFiles} Documents Indexed
               </Badge>
-              <Button variant="outline" size="sm">
-                Admin Panel
-              </Button>
+              <Link to="/admin">
+                <Button variant="outline" size="sm">
+                  Admin Panel
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
