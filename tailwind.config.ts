@@ -40,9 +40,9 @@ export default {
           "900": "hsl(var(--brand-900))",
         },
         semantic: {
-          "primary": "hsl(var(--semantic-primary))",
-          "secondary": "hsl(var(--semantic-secondary))",
-          "accent": "hsl(var(--semantic-accent))",
+          primary: "hsl(var(--semantic-primary))",
+          secondary: "hsl(var(--semantic-secondary))",
+          accent: "hsl(var(--semantic-accent))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

@@ -1,22 +1,28 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Upload, 
-  FileText, 
-  Trash2, 
-  Search, 
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Upload,
+  FileText,
+  Trash2,
+  Search,
   Database,
   Cpu,
   ArrowLeft,
   RefreshCw,
   BarChart3,
-  Settings
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
+  Settings,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 
 interface UploadedFile {
   id: string;
@@ -25,38 +31,38 @@ interface UploadedFile {
   size: string;
   uploadDate: string;
   chunks: number;
-  status: 'indexed' | 'processing' | 'error';
+  status: "indexed" | "processing" | "error";
 }
 
 export default function Admin() {
   const [files, setFiles] = useState<UploadedFile[]>([
     {
-      id: '1',
-      name: 'research_paper_ml.pdf',
-      type: 'PDF',
-      size: '2.4 MB',
-      uploadDate: '2024-01-15',
+      id: "1",
+      name: "research_paper_ml.pdf",
+      type: "PDF",
+      size: "2.4 MB",
+      uploadDate: "2024-01-15",
       chunks: 24,
-      status: 'indexed'
+      status: "indexed",
     },
     {
-      id: '2',
-      name: 'ai_research.txt',
-      type: 'TXT',
-      size: '850 KB',
-      uploadDate: '2024-01-14',
+      id: "2",
+      name: "ai_research.txt",
+      type: "TXT",
+      size: "850 KB",
+      uploadDate: "2024-01-14",
       chunks: 12,
-      status: 'indexed'
+      status: "indexed",
     },
     {
-      id: '3',
-      name: 'nlp_dataset.csv',
-      type: 'CSV',
-      size: '5.2 MB',
-      uploadDate: '2024-01-13',
+      id: "3",
+      name: "nlp_dataset.csv",
+      type: "CSV",
+      size: "5.2 MB",
+      uploadDate: "2024-01-13",
       chunks: 45,
-      status: 'processing'
-    }
+      status: "processing",
+    },
   ]);
 
   const [isUploading, setIsUploading] = useState(false);
@@ -67,26 +73,28 @@ export default function Admin() {
     if (uploadedFiles) {
       setIsUploading(true);
       setUploadProgress(0);
-      
+
       // Simulate upload progress
       const interval = setInterval(() => {
-        setUploadProgress(prev => {
+        setUploadProgress((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
             setIsUploading(false);
-            
+
             // Add new files to the list
-            const newFiles: UploadedFile[] = Array.from(uploadedFiles).map((file, index) => ({
-              id: Date.now().toString() + index,
-              name: file.name,
-              type: file.name.split('.').pop()?.toUpperCase() || 'UNKNOWN',
-              size: (file.size / 1024 / 1024).toFixed(1) + ' MB',
-              uploadDate: new Date().toISOString().split('T')[0],
-              chunks: Math.floor(Math.random() * 50) + 5,
-              status: 'processing' as const
-            }));
-            
-            setFiles(prev => [...newFiles, ...prev]);
+            const newFiles: UploadedFile[] = Array.from(uploadedFiles).map(
+              (file, index) => ({
+                id: Date.now().toString() + index,
+                name: file.name,
+                type: file.name.split(".").pop()?.toUpperCase() || "UNKNOWN",
+                size: (file.size / 1024 / 1024).toFixed(1) + " MB",
+                uploadDate: new Date().toISOString().split("T")[0],
+                chunks: Math.floor(Math.random() * 50) + 5,
+                status: "processing" as const,
+              }),
+            );
+
+            setFiles((prev) => [...newFiles, ...prev]);
             return 100;
           }
           return prev + 10;
@@ -96,27 +104,31 @@ export default function Admin() {
   };
 
   const deleteFile = (id: string) => {
-    setFiles(prev => prev.filter(file => file.id !== id));
+    setFiles((prev) => prev.filter((file) => file.id !== id));
   };
 
   const reindexFile = (id: string) => {
-    setFiles(prev => prev.map(file => 
-      file.id === id ? { ...file, status: 'processing' as const } : file
-    ));
-    
+    setFiles((prev) =>
+      prev.map((file) =>
+        file.id === id ? { ...file, status: "processing" as const } : file,
+      ),
+    );
+
     // Simulate reindexing
     setTimeout(() => {
-      setFiles(prev => prev.map(file => 
-        file.id === id ? { ...file, status: 'indexed' as const } : file
-      ));
+      setFiles((prev) =>
+        prev.map((file) =>
+          file.id === id ? { ...file, status: "indexed" as const } : file,
+        ),
+      );
     }, 2000);
   };
 
   const stats = {
     totalFiles: files.length,
     totalChunks: files.reduce((sum, file) => sum + file.chunks, 0),
-    indexedFiles: files.filter(f => f.status === 'indexed').length,
-    processingFiles: files.filter(f => f.status === 'processing').length
+    indexedFiles: files.filter((f) => f.status === "indexed").length,
+    processingFiles: files.filter((f) => f.status === "processing").length,
   };
 
   return (
@@ -137,8 +149,12 @@ export default function Admin() {
                   <Settings className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-                  <p className="text-sm text-gray-600">Manage your document collection</p>
+                  <h1 className="text-xl font-bold text-gray-900">
+                    Admin Panel
+                  </h1>
+                  <p className="text-sm text-gray-600">
+                    Manage your document collection
+                  </p>
                 </div>
               </div>
             </div>
@@ -151,29 +167,45 @@ export default function Admin() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="border-brand-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Files</CardTitle>
-              <div className="text-2xl font-bold text-gray-900">{stats.totalFiles}</div>
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total Files
+              </CardTitle>
+              <div className="text-2xl font-bold text-gray-900">
+                {stats.totalFiles}
+              </div>
             </CardHeader>
           </Card>
-          
+
           <Card className="border-brand-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">Indexed Files</CardTitle>
-              <div className="text-2xl font-bold text-green-600">{stats.indexedFiles}</div>
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Indexed Files
+              </CardTitle>
+              <div className="text-2xl font-bold text-green-600">
+                {stats.indexedFiles}
+              </div>
             </CardHeader>
           </Card>
-          
+
           <Card className="border-brand-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">Processing</CardTitle>
-              <div className="text-2xl font-bold text-yellow-600">{stats.processingFiles}</div>
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Processing
+              </CardTitle>
+              <div className="text-2xl font-bold text-yellow-600">
+                {stats.processingFiles}
+              </div>
             </CardHeader>
           </Card>
-          
+
           <Card className="border-brand-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Chunks</CardTitle>
-              <div className="text-2xl font-bold text-brand-600">{stats.totalChunks}</div>
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total Chunks
+              </CardTitle>
+              <div className="text-2xl font-bold text-brand-600">
+                {stats.totalChunks}
+              </div>
             </CardHeader>
           </Card>
         </div>
@@ -192,9 +224,13 @@ export default function Admin() {
           <CardContent>
             {isUploading ? (
               <div className="space-y-4">
-                <div className="text-sm text-gray-600">Uploading and processing files...</div>
+                <div className="text-sm text-gray-600">
+                  Uploading and processing files...
+                </div>
                 <Progress value={uploadProgress} className="w-full" />
-                <div className="text-xs text-gray-500">{uploadProgress}% complete</div>
+                <div className="text-xs text-gray-500">
+                  {uploadProgress}% complete
+                </div>
               </div>
             ) : (
               <label className="cursor-pointer">
@@ -236,52 +272,61 @@ export default function Admin() {
           <CardContent>
             <div className="space-y-4">
               {files.map((file) => (
-                <div 
+                <div
                   key={file.id}
                   className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
                 >
                   <div className="flex items-center space-x-4">
                     <FileText className="h-8 w-8 text-brand-500" />
                     <div>
-                      <div className="font-medium text-gray-900">{file.name}</div>
+                      <div className="font-medium text-gray-900">
+                        {file.name}
+                      </div>
                       <div className="text-sm text-gray-500">
-                        {file.size} • {file.chunks} chunks • Uploaded {file.uploadDate}
+                        {file.size} • {file.chunks} chunks • Uploaded{" "}
+                        {file.uploadDate}
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3">
                     <Badge variant="outline" className="text-xs">
                       {file.type}
                     </Badge>
-                    
-                    <Badge 
+
+                    <Badge
                       variant={
-                        file.status === 'indexed' ? 'default' : 
-                        file.status === 'processing' ? 'secondary' : 
-                        'destructive'
+                        file.status === "indexed"
+                          ? "default"
+                          : file.status === "processing"
+                            ? "secondary"
+                            : "destructive"
                       }
                       className={
-                        file.status === 'indexed' ? 'bg-green-500' :
-                        file.status === 'processing' ? 'bg-yellow-500' :
-                        'bg-red-500'
+                        file.status === "indexed"
+                          ? "bg-green-500"
+                          : file.status === "processing"
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
                       }
                     >
-                      {file.status === 'indexed' ? 'Indexed' :
-                       file.status === 'processing' ? 'Processing...' :
-                       'Error'}
+                      {file.status === "indexed"
+                        ? "Indexed"
+                        : file.status === "processing"
+                          ? "Processing..."
+                          : "Error"}
                     </Badge>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => reindexFile(file.id)}
-                        disabled={file.status === 'processing'}
+                        disabled={file.status === "processing"}
                       >
                         <RefreshCw className="h-4 w-4" />
                       </Button>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
