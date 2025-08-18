@@ -83,11 +83,28 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 250 100% 65%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 20% 15%;
+    --secondary-foreground: 250 100% 80%;
+
+    /* Brand colors for dark mode */
+    --brand-50: 245 50% 8%;
+    --brand-100: 245 60% 12%;
+    --brand-200: 245 70% 18%;
+    --brand-300: 245 80% 25%;
+    --brand-400: 245 90% 35%;
+    --brand-500: 250 100% 55%;
+    --brand-600: 250 100% 65%;
+    --brand-700: 250 100% 75%;
+    --brand-800: 250 100% 85%;
+    --brand-900: 250 100% 92%;
+
+    /* Semantic search dark mode colors */
+    --semantic-primary: 250 100% 65%;
+    --semantic-secondary: 240 20% 15%;
+    --semantic-accent: 270 100% 70%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
