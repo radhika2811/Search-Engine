@@ -35,11 +35,14 @@ export default function Index() {
   const [isSearching, setIsSearching] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState(0);
 
+  // Mini preview state
+  const [filePreviews, setFilePreviews] = useState<
+    { name: string; size: number; type: string; preview?: string }[]
+  >([]);
+
   const handleSearch = async () => {
     if (!query.trim()) return;
-
     setIsSearching(true);
-
     // Simulate API call
     setTimeout(() => {
       const mockResults: SearchResult[] = [
@@ -76,10 +79,70 @@ export default function Index() {
     }, 1500);
   };
 
+  // Enhanced: File upload with mini preview
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       setUploadedFiles((prev) => prev + files.length);
+
+      const newPreviews: {
+        name: string;
+        size: number;
+        type: string;
+        preview?: string;
+      }[] = [];
+      let processed = 0;
+      Array.from(files).forEach((file, idx, arr) => {
+        if (
+          file.type.startsWith("text/") ||
+          file.name.endsWith(".txt") ||
+          file.name.endsWith(".csv") ||
+          file.name.endsWith(".json")
+        ) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            newPreviews.push({
+              name: file.name,
+              size: file.size,
+              type: file.type || "Unknown",
+              preview:
+                typeof e.target?.result === "string"
+                  ? e.target.result.slice(0, 300)
+                  : "",
+            });
+            processed += 1;
+            if (processed === arr.length) {
+              setFilePreviews((prev) => [...prev, ...newPreviews]);
+            }
+          };
+          reader.readAsText(file);
+        } else if (
+          file.type === "application/pdf" ||
+          file.name.endsWith(".pdf")
+        ) {
+          newPreviews.push({
+            name: file.name,
+            size: file.size,
+            type: file.type || "PDF",
+            preview: "Ready to search in your PDF!",
+          });
+          processed += 1;
+          if (processed === arr.length) {
+            setFilePreviews((prev) => [...prev, ...newPreviews]);
+          }
+        } else {
+          newPreviews.push({
+            name: file.name,
+            size: file.size,
+            type: file.type || "Unknown",
+            preview: "Preview not available.",
+          });
+          processed += 1;
+          if (processed === arr.length) {
+            setFilePreviews((prev) => [...prev, ...newPreviews]);
+          }
+        }
+      });
     }
   };
 
@@ -190,6 +253,31 @@ export default function Index() {
                   </div>
                 </label>
               </div>
+
+              {/* File Mini Previews */}
+              {filePreviews.length > 0 && (
+                <div className="mt-4 max-w-xl mx-auto text-left space-y-3">
+                  {filePreviews.map((file, idx) => (
+                    <div
+                      key={idx}
+                      className="border border-brand-200 rounded-lg p-3 bg-brand-50"
+                    >
+                      <div className="font-semibold text-brand-700">
+                        {file.name}
+                      </div>
+                      <div className="text-xs text-gray-500 mb-2">
+                        {file.type} · {(file.size / 1024).toFixed(1)} KB
+                      </div>
+                      <div
+                        className="text-gray-700 text-sm whitespace-pre-line overflow-hidden"
+                        style={{ maxHeight: 80 }}
+                      >
+                        {file.preview}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Search Results */}
